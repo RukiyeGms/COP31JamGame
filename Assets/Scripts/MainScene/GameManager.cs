@@ -21,11 +21,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] int maxFish = 2;
     int fishonScreen;
     [SerializeField] float fishonSpawnTime = 5;
+    float nextFishSpawnTime;
 
     [SerializeField] float spawnPosMaxY = 3;
     [SerializeField] float spawnPosMinY = -3;
     [SerializeField] float spawnPosMaxX = 6;
     [SerializeField] float spawnPosMinX = -6;
+
+    public static GameObject playerObject;
+    Transform player;
+
+    [SerializeField] LayerMask spawnObstacleMask;
+    [SerializeField] float objectCheckRadius = 0.25f;
+    [SerializeField] float playerCheckRadius = 2f;
+    [SerializeField] int maxSpawnAttempts = 10;
+
+    [SerializeField] float trashSpawnInterval = 0.3f;
+    float nextTrashSpawnTime;
 
     GameObject menuPanel;
 
@@ -47,16 +59,32 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        player = playerObject.transform;
         coralSpawn.SpawnCorals();
+
+        nextFishSpawnTime = Time.time + fishonSpawnTime;
     }
 
     private void Update()
     {
-        if ( isGamePlayed)
+        if (!isGamePlayed)
+            return;
+
+        if (FishRescueMinigame.Instance != null &&
+            FishRescueMinigame.Instance.IsActive)
+            return;
+
+        if (Time.time >= nextTrashSpawnTime)
         {
             SpawnTrash();
+            nextTrashSpawnTime = Time.time + trashSpawnInterval;
         }
-        
+
+        if (Time.time >= nextFishSpawnTime)
+        {
+            SpawnFish();
+            nextFishSpawnTime = Time.time + fishonSpawnTime;
+        }
     }
 
     void GameStart()
@@ -99,24 +127,69 @@ public class GameManager : MonoBehaviour
         return instance.trashPicked;
     }
 
+
     private void SpawnFish()
     {
+        if (fishPrefab == null || fishonScreen >= maxFish)
+            return;
 
+        for (int attempt = 0; attempt < maxSpawnAttempts; attempt++)
+        {
+            Vector2 spawnPos = GetRandomSpawnPos();
+
+            if (player != null &&
+                Vector2.Distance(spawnPos, player.position)
+                    < playerCheckRadius)
+            {
+                continue;
+            }
+
+            if (Physics2D.OverlapCircle(
+                spawnPos, objectCheckRadius, spawnObstacleMask))
+            {
+                continue;
+            }
+
+            Instantiate(fishPrefab, spawnPos, Quaternion.identity);
+
+            fishonScreen++;
+            return;
+        }
     }
+
+
 
     private void SpawnTrash()
     {
-        if (trashonscreen < maxTrash)
+        if (trashonscreen >= maxTrash)
+            return;
+
+        for (int attempt = 0; attempt < maxSpawnAttempts; attempt++)
         {
-            trashonscreen++;
             Vector2 spawnPos = GetRandomSpawnPos();
 
-            //check if there are nearby trash and if there is spawn away
+            if (player != null &&
+                Vector2.Distance(spawnPos, player.position)
+                    < playerCheckRadius)
+            {
+                continue;
+            }
+            if (Physics2D.OverlapCircle(
+                spawnPos, objectCheckRadius, spawnObstacleMask))
+            {
+                continue;
+            }
 
-            Instantiate(trashPrefab, GetRandomSpawnPos() ,Quaternion.identity);
+            
+            Instantiate(trashPrefab, spawnPos, Quaternion.identity);
+            trashonscreen++;
 
+            return;
         }
+
+        
     }
+
 
     Vector2 GetRandomSpawnPos()
     {
@@ -126,7 +199,7 @@ public class GameManager : MonoBehaviour
         return new Vector2(spawnx, spawny);
     }
 
-
+    
 
 
 

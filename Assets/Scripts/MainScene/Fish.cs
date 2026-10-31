@@ -19,41 +19,67 @@ public class Fish : MonoBehaviour
         trashData = GetRandomTrash();
         spriteRendererFish.sprite =  fishData.sprite;
     }
+
+    private void OnMouseDown()
+    {
+        if (FishRescueMinigame.Instance.IsActive)
+            return;
+
+        FishRescueMinigame.Instance.StartRescue(this);
+    }
+
+
     private FishData GetRandomFish()
     {
-        Rarity randomRarity = ChooseRarity();
-
-        if (gameDatabase.fishes.Count == 0)
+        if (gameDatabase == null || gameDatabase.fishes.Count == 0)
         {
             return null;
         }
-        else
+
+        Rarity randomRarity = ChooseRarity();
+
+        List<FishData> raritySpecificFishes = new List<FishData>();
+
+        foreach (FishData fish in gameDatabase.fishes)
         {
-            List<FishData> raritySpesificFishes = new List<FishData>();
-            foreach (var fish in gameDatabase.fishes)
+            if (fish != null && fish.rarity == randomRarity)
             {
-                if (fish.rarity == randomRarity)
+                raritySpecificFishes.Add(fish);
+            }
+        }
+        if (raritySpecificFishes.Count == 0)
+        {
+
+            foreach (FishData fish in gameDatabase.fishes)
+            {
+                if (fish != null)
                 {
-                    raritySpesificFishes.Add(fish);
+                    raritySpecificFishes.Add(fish);
                 }
             }
-
-            return raritySpesificFishes[Random.Range(0, raritySpesificFishes.Count)];
         }
+
+        if (raritySpecificFishes.Count == 0)
+            return null;
+
+        int index = Random.Range(0, raritySpecificFishes.Count);
+        return raritySpecificFishes[index];
     }
+
 
     private Rarity ChooseRarity()
     {
-        int random = Random.Range(0, commonChance + rareChance + legendaryChance);
+        int random = Random.Range(
+            0, commonChance + rareChance + legendaryChance
+        );
 
-        if (random <= commonChance)
+        if (random < commonChance)
         {
             return Rarity.Common;
         }
-        else if (random <= rareChance)
+        else if (random < commonChance + rareChance)
         {
             return Rarity.Rare;
-
         }
         else
         {
@@ -70,5 +96,10 @@ public class Fish : MonoBehaviour
 
             return gameDatabase.trashes[randomindex];
         }
+    }
+
+    public void Rescue()
+    {
+
     }
 }

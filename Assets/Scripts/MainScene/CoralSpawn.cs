@@ -1,54 +1,65 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoralSpawn : MonoBehaviour
 {
-    [SerializeField] List<Sprite> CoralSprites;
+    [SerializeField] List<string> CoralAnimationNames;
 
     [SerializeField] float maxSpawnY = 5;
     [SerializeField] float maxSpawnX = 9;
     [SerializeField] float minSpawnY = -5;
     [SerializeField] float minSpawnX = -9;
 
-    Vector2 spawnPosition;
-
     [SerializeField] int coralAmount = 15;
-
     [SerializeField] GameObject coralPrefab;
-    SpriteRenderer spriteRenderer;
 
-    private void Awake()
-    {
-        spriteRenderer = coralPrefab.GetComponent<SpriteRenderer>();
-    }
+    [SerializeField] LayerMask spawnObstacleMask;
+    [SerializeField] float checkRadius = 0.25f;
+    [SerializeField] int maxAttempts = 10;
 
     public void SpawnCorals()
     {
         for (int i = 0; i < coralAmount; i++)
         {
-            GetRandomCoralSprite();
-            spawnPosition = GetRandomSpawnPos();
-            Instantiate(coralPrefab, spawnPosition, Quaternion.identity);
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                Vector2 spawnPosition = GetRandomSpawnPos();
 
+                
+                if (Physics2D.OverlapCircle(
+                    spawnPosition, checkRadius, spawnObstacleMask))
+                {
+                    continue;
+                }
+
+                GameObject coral = Instantiate(
+                    coralPrefab, spawnPosition, Quaternion.identity);
+
+                Animator animator = coral.GetComponent<Animator>();
+                GetRandomCoralAnimation(animator);
+
+                break;
+            }
         }
     }
 
-    void GetRandomCoralSprite()
+    void GetRandomCoralAnimation(Animator animator)
     {
-        if (CoralSprites == null) { return; }
-        else
-        {
-            int index = Random.Range(0, CoralSprites.Count);
-            spriteRenderer.sprite = CoralSprites[index];
-            
-        }
+        if (animator == null ||
+            CoralAnimationNames == null ||
+            CoralAnimationNames.Count == 0)
+            return;
+
+        int index = Random.Range(0, CoralAnimationNames.Count);
+        animator.SetBool(CoralAnimationNames[index], true);
     }
 
     Vector2 GetRandomSpawnPos()
     {
-        float spawnx = Random.Range(minSpawnX, maxSpawnX);
-        float spawny = Random.Range(minSpawnY, maxSpawnY);
+        float x = Random.Range(minSpawnX, maxSpawnX);
+        float y = Random.Range(minSpawnY, maxSpawnY);
 
-        return new Vector2(spawnx, spawny);
+        return new Vector2(x, y);
     }
 }

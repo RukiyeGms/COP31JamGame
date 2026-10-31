@@ -4,20 +4,20 @@ public class Trash : MonoBehaviour
 {
     [SerializeField] GameDatabase gameDatabase;
     TrashData trashData;
-    SpriteRenderer spriteRenderer;
+    Animator animator;
     bool canbepicked;
 
 
     private void Awake()
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         trashData = GetRandomTrash();
-        spriteRenderer.sprite = trashData.sprite;
+        animator.SetBool(trashData.animName, true);
         canbepicked = false;
     }
     private void OnMouseDown()
     {
-        //PlayerPrefs.SetInt(trashData.id, 1);
+        if (FishRescueMinigame.Instance.IsActive) { return; }
         Pickup();
     }
 
@@ -26,6 +26,14 @@ public class Trash : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             canbepicked=true;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            canbepicked = true;
         }
     }
 
