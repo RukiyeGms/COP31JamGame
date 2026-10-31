@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 2
   fishName: raretestfish
   rarity: 1
-  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  sprite: {fileID: 21300000, guid: 33a105b2fc84159458014b33d3057cf2, type: 3}
   info: rare test fish info
