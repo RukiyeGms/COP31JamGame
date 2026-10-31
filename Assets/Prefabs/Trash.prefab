@@ -173,3 +173,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484e2e3862729864d8eea49815bc6e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Trash
+  gameDatabase: {fileID: 11400000, guid: 8aabbb8e6cacaa340a40be82005130af, type: 2}
