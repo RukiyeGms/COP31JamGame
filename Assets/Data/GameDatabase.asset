@@ -17,4 +17,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 402001c3b2ae86f4a964fd1c73ee95d3, type: 2}
   - {fileID: 11400000, guid: 3a5c48e583976304ab9d45c9961ab377, type: 2}
   trashes:
-  - {fileID: 11400000, guid: ec619f225cc9bdc49bb66cfdbc643705, type: 2}
+  - {fileID: 11400000, guid: f869c9beb4614aa4fa01c40ee94b41bc, type: 2}
+  - {fileID: 11400000, guid: 09337c3bf0abac34099409bea82c06c2, type: 2}
+  - {fileID: 11400000, guid: dc2f0f4c705d0ee4d8fcb77f564573e9, type: 2}
+  - {fileID: 11400000, guid: f1637dc4810138b4eb753daac654d1f4, type: 2}
+  - {fileID: 11400000, guid: 44fbaab99f287e44693cf92fb4ada60d, type: 2}

@@ -10,9 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af0df60fd53e4ca46be4c0311b6e62f3, type: 3}
-  m_Name: TestTrash
+  m_Name: trash2
   m_EditorClassIdentifier: Assembly-CSharp::TrashData
-  id: 1
-  trashName: testtrash
-  sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  info: testtrash info
+  id: trash2
+  animName: trash2

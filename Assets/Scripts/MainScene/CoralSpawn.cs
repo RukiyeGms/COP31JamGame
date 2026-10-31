@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CoralSpawn : MonoBehaviour
 {
-    [SerializeField] List<Sprite> CoralSprites;
+    [SerializeField] List<string> CoralAnimationNames;
 
     [SerializeField] float maxSpawnY = 5;
     [SerializeField] float maxSpawnX = 9;
@@ -15,31 +15,33 @@ public class CoralSpawn : MonoBehaviour
     [SerializeField] int coralAmount = 15;
 
     [SerializeField] GameObject coralPrefab;
-    SpriteRenderer spriteRenderer;
+    Animator animator;
 
     private void Awake()
     {
-        spriteRenderer = coralPrefab.GetComponent<SpriteRenderer>();
+        animator = coralPrefab.GetComponent<Animator>();
     }
 
     public void SpawnCorals()
     {
         for (int i = 0; i < coralAmount; i++)
         {
-            GetRandomCoralSprite();
+            
             spawnPosition = GetRandomSpawnPos();
-            Instantiate(coralPrefab, spawnPosition, Quaternion.identity);
+            GameObject coral = Instantiate(coralPrefab, spawnPosition, Quaternion.identity);
+            animator = coral.GetComponent<Animator>();
+            GetRandomCoralAnimation();
 
         }
     }
 
-    void GetRandomCoralSprite()
+    void GetRandomCoralAnimation()
     {
-        if (CoralSprites == null) { return; }
+        if (CoralAnimationNames == null) { return; }
         else
         {
-            int index = Random.Range(0, CoralSprites.Count);
-            spriteRenderer.sprite = CoralSprites[index];
+            int index = Random.Range(0, CoralAnimationNames.Count);
+            animator.SetBool(CoralAnimationNames[index] , true);
             
         }
     }

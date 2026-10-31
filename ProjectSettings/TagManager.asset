@@ -38,11 +38,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: alwaysOnTop
-    uniqueID: 3967151257
+  - name: alwaysOnBottom
+    uniqueID: 2371834895
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: alwaysOnTop
+    uniqueID: 3967151257
     locked: 0
   m_RenderingLayers:
   - Default
