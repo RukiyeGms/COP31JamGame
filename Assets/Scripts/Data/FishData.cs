@@ -7,7 +7,7 @@ public enum Rarity
     Legendary
 }
 
-[CreateAssetMenu(fileName = "NewFish" , menuName = "Fish")]
+[CreateAssetMenu(fileName = "NewFish" , menuName = "Game/Fish")]
 public class FishData : ScriptableObject
 {
     public string id;
