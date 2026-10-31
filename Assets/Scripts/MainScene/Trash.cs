@@ -17,7 +17,7 @@ public class Trash : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        
+        if (FishRescueMinigame.Instance.IsActive) { return; }
         Pickup();
     }
 
