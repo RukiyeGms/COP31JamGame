@@ -10,13 +10,23 @@ public class GameManager : MonoBehaviour
     int totaltrashPicked;
     int totalfishRescued;
 
+    [SerializeField] GameObject fishPrefab;
+    [SerializeField] GameObject trashPrefab;
+
     [SerializeField] int maxTrash = 10;
     int trashonscreen;
+
+    [SerializeField] int maxFish = 2;
+    int fishonScreen;
+    [SerializeField] float fishonSpawnTime = 5;
 
     [SerializeField] float spawnPosMaxY = 3;
     [SerializeField] float spawnPosMinY = -3;
     [SerializeField] float spawnPosMaxX = 6;
     [SerializeField] float spawnPosMinX = -6;
+
+    GameObject menuPanel;
+
     private void Awake()
     {
         if(instance == null)
@@ -32,10 +42,25 @@ public class GameManager : MonoBehaviour
         trashonscreen = 0;
     }
 
+    private void Update()
+    {
+        if ( isGamePlayed)
+        {
+            
+        }
+    }
+
+    void GameStart()
+    {
+
+    }
+
     public void FishRescuedUp()
     {
         fishRescued++;
         trashPicked++;
+        totalfishRescued++;
+        totaltrashPicked++;
     }
 
     public int AskFishRescued()
@@ -46,6 +71,7 @@ public class GameManager : MonoBehaviour
     public void TrashPicked()
     {
         trashPicked++;
+        totaltrashPicked++;
         trashonscreen--;
     }
 
@@ -64,6 +90,7 @@ public class GameManager : MonoBehaviour
         if (trashonscreen < maxTrash)
         {
             trashonscreen++;
+            Instantiate(trashPrefab, GetRandomSpawnPos() ,Quaternion.identity);
         }
     }
 
@@ -74,5 +101,11 @@ public class GameManager : MonoBehaviour
 
         return new Vector2(spawnx, spawny);
     }
+
+
+
+
+
+    /// menu and panel thingy
         
 }
