@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
         coralSpawn = GetComponent<CoralSpawn>();
     }
 
+    private void Start()
+    {
+        coralSpawn.SpawnCorals();
+    }
+
     private void Update()
     {
         if ( isGamePlayed)

@@ -5,6 +5,7 @@ public class Trash : MonoBehaviour
     [SerializeField] GameDatabase gameDatabase;
     TrashData trashData;
     SpriteRenderer spriteRenderer;
+    bool canbepicked;
 
 
     private void Awake()
@@ -12,6 +13,7 @@ public class Trash : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         trashData = GetRandomTrash();
         spriteRenderer.sprite = trashData.sprite;
+        canbepicked = false;
     }
     private void OnMouseDown()
     {
@@ -19,8 +21,26 @@ public class Trash : MonoBehaviour
         Pickup();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            canbepicked=true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            canbepicked = false;
+        }
+    }
+
     private void Pickup()
     {
+        if (!canbepicked) {return; }
+
         GameManager.TrashPicked();
         Destroy(gameObject);
     }

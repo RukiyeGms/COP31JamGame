@@ -155,12 +155,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.050689697}
-  m_Radius: 1.6321716
+  m_Radius: 1.0042114
 --- !u!114 &6093333584694049898
 MonoBehaviour:
   m_ObjectHideFlags: 0
