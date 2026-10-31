@@ -21,6 +21,7 @@ public class Trash : MonoBehaviour
 
     private void Pickup()
     {
+        GameManager.TrashPicked();
         Destroy(gameObject);
     }
 

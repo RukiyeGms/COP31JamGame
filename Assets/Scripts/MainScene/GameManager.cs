@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    CoralSpawn coralSpawn;
+
     bool isGamePlayed;
     public static GameManager instance;
     int trashPicked;
@@ -38,46 +40,58 @@ public class GameManager : MonoBehaviour
 
         trashPicked = 0;
         fishRescued = 0;
-        isGamePlayed = false;
+        isGamePlayed = true; //false later
         trashonscreen = 0;
+        coralSpawn = GetComponent<CoralSpawn>();
     }
 
     private void Update()
     {
         if ( isGamePlayed)
         {
-            
+            SpawnTrash();
         }
+        
     }
 
     void GameStart()
     {
-
+        isGamePlayed=true;
     }
 
-    public void FishRescuedUp()
+    void GameStop()
     {
-        fishRescued++;
-        trashPicked++;
-        totalfishRescued++;
-        totaltrashPicked++;
+        isGamePlayed=false;
+        Time.timeScale = 0;
+    }
+    void GameEnd()
+    {
+        isGamePlayed=false;//an more
     }
 
-    public int AskFishRescued()
+    public static void FishRescuedUp()
     {
-        return fishRescued;
+        instance.fishRescued++;
+        instance.trashPicked++;
+        instance.totalfishRescued++;
+        instance.totaltrashPicked++;
     }
 
-    public void TrashPicked()
+    public static int AskFishRescued()
     {
-        trashPicked++;
-        totaltrashPicked++;
-        trashonscreen--;
+        return instance.fishRescued;
     }
 
-    public int AskTrashPicked()
+    public static void TrashPicked()
     {
-        return trashPicked;
+        instance.trashPicked++;
+        instance.totaltrashPicked++;
+        instance.trashonscreen--;
+    }
+
+    public static int AskTrashPicked()
+    {
+        return instance.trashPicked;
     }
 
     private void SpawnFish()
@@ -90,7 +104,12 @@ public class GameManager : MonoBehaviour
         if (trashonscreen < maxTrash)
         {
             trashonscreen++;
+            Vector2 spawnPos = GetRandomSpawnPos();
+
+            //check if there are nearby trash and if there is spawn away
+
             Instantiate(trashPrefab, GetRandomSpawnPos() ,Quaternion.identity);
+
         }
     }
 
