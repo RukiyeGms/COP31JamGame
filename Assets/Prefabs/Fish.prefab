@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1775474581908299243}
   - component: {fileID: 5964703987990514297}
   - component: {fileID: 4334560263141568434}
+  - component: {fileID: 6153193079794719682}
   m_Layer: 6
   m_Name: Fish
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   commonChance: 70
   rareChance: 25
   legendaryChance: 5
+  rescueDistance: 3
 --- !u!212 &4334560263141568434
 SpriteRenderer:
   serializedVersion: 2
@@ -109,3 +111,39 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!58 &6153193079794719682
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8390917100674333446}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 2.4949996

@@ -44,6 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: wateroverlay
+    uniqueID: 1936060113
+    locked: 0
   - name: alwaysOnTop
     uniqueID: 3967151257
     locked: 0

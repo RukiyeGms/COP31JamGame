@@ -5,7 +5,7 @@ public class Trash : MonoBehaviour
     [SerializeField] GameDatabase gameDatabase;
     TrashData trashData;
     Animator animator;
-    bool canbepicked;
+    [SerializeField] float pickupDistance = 2f;
 
 
     private void Awake()
@@ -13,42 +13,35 @@ public class Trash : MonoBehaviour
         animator = GetComponent<Animator>();
         trashData = GetRandomTrash();
         animator.SetBool(trashData.animName, true);
-        canbepicked = false;
     }
     private void OnMouseDown()
     {
-        if (FishRescueMinigame.Instance.IsActive) { return; }
+        Debug.Log("Trash OnMouseDown called!");
+
+        if (FishRescueMinigame.Instance != null &&
+            FishRescueMinigame.Instance.IsActive)
+            return;
+
+        if (GameManager.playerObject == null)
+            return;
+
+        float distance = Vector2.Distance(
+            transform.position,
+            GameManager.playerObject.transform.position
+        );
+
+        Debug.Log("Distance to player: " + distance);
+
+        if (distance > pickupDistance)
+            return;
+
+        Debug.Log("Trash picked successfully!");
         Pickup();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            canbepicked=true;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            canbepicked = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            canbepicked = false;
-        }
-    }
 
     private void Pickup()
     {
-        if (!canbepicked) {return; }
-
         GameManager.TrashPicked();
         Destroy(gameObject);
     }

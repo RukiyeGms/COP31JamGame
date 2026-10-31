@@ -39,6 +39,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] float trashSpawnInterval = 0.3f;
     float nextTrashSpawnTime;
 
+    //gnlük sayac
+    [SerializeField] float dayDuration = 90f;
+
+    int currentDay = 1;
+    float remainingTime;
+
+    public int CurrentDay => currentDay;
+    public float RemainingTime => remainingTime;
+
+    //
+
     GameObject menuPanel;
 
     private void Awake()
@@ -63,12 +74,24 @@ public class GameManager : MonoBehaviour
         coralSpawn.SpawnCorals();
 
         nextFishSpawnTime = Time.time + fishonSpawnTime;
+
+        remainingTime = dayDuration;
     }
+
 
     private void Update()
     {
         if (!isGamePlayed)
             return;
+
+        remainingTime -= Time.deltaTime;
+
+        if (remainingTime <= 0)
+        {
+            remainingTime = 0;
+            EndDay();
+            return;
+        }
 
         if (FishRescueMinigame.Instance != null &&
             FishRescueMinigame.Instance.IsActive)
@@ -86,6 +109,7 @@ public class GameManager : MonoBehaviour
             nextFishSpawnTime = Time.time + fishonSpawnTime;
         }
     }
+
 
     void GameStart()
     {
@@ -108,6 +132,7 @@ public class GameManager : MonoBehaviour
         instance.trashPicked++;
         instance.totalfishRescued++;
         instance.totaltrashPicked++;
+        instance.fishonScreen--;
     }
 
     public static int AskFishRescued()
@@ -199,10 +224,17 @@ public class GameManager : MonoBehaviour
         return new Vector2(spawnx, spawny);
     }
 
-    
+    private void EndDay()
+    {
+        isGamePlayed = false;
+
+        Debug.Log("Day " + currentDay + " completed!");
+        Debug.Log("Trash collected: " + trashPicked);
+        Debug.Log("Fish rescued: " + fishRescued);
+    }
 
 
 
     /// menu and panel thingy
-        
+
 }

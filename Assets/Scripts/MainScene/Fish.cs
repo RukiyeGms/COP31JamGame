@@ -13,6 +13,8 @@ public class Fish : MonoBehaviour
     [SerializeField] int rareChance = 25;
     [SerializeField] int legendaryChance = 5;
 
+    [SerializeField] float rescueDistance = 2f;
+
     private void Awake()
     {
         fishData = GetRandomFish();
@@ -22,7 +24,19 @@ public class Fish : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (FishRescueMinigame.Instance.IsActive)
+        if (FishRescueMinigame.Instance == null ||
+            FishRescueMinigame.Instance.IsActive)
+            return;
+
+        if (GameManager.playerObject == null)
+            return;
+
+        float distance = Vector2.Distance(
+            transform.position,
+            GameManager.playerObject.transform.position
+        );
+
+        if (distance > rescueDistance)
             return;
 
         FishRescueMinigame.Instance.StartRescue(this);
@@ -100,6 +114,12 @@ public class Fish : MonoBehaviour
 
     public void Rescue()
     {
+        PlayerPrefs.SetInt(fishData.id, 1);
 
+        PlayerPrefs.Save();
+
+        GameManager.FishRescuedUp();
+
+        Destroy(gameObject);
     }
 }

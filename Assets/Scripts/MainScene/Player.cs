@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     {
         if (FishRescueMinigame.Instance != null && FishRescueMinigame.Instance.IsActive)
         {
+            target = transform.position;
             return;
         }
 
