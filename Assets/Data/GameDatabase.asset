@@ -15,7 +15,13 @@ MonoBehaviour:
   fishes:
   - {fileID: 11400000, guid: 8e0ee2fda7041964cb670068da0ccfc4, type: 2}
   - {fileID: 11400000, guid: 402001c3b2ae86f4a964fd1c73ee95d3, type: 2}
+  - {fileID: 11400000, guid: f51933ca04b0c734489cdc19967a24d4, type: 2}
+  - {fileID: 11400000, guid: d30e674853dbd6c479fb1f8529fabd67, type: 2}
   - {fileID: 11400000, guid: 3a5c48e583976304ab9d45c9961ab377, type: 2}
+  - {fileID: 11400000, guid: f7de05f3a6004144e9be352373f8e2a3, type: 2}
+  - {fileID: 11400000, guid: c596317fdf5350945962777c01e805c6, type: 2}
+  - {fileID: 11400000, guid: f131641f74c961143ac42b8d0c3a3173, type: 2}
+  - {fileID: 11400000, guid: 74755f7ee78fac343b4a77adb612e306, type: 2}
   trashes:
   - {fileID: 11400000, guid: f869c9beb4614aa4fa01c40ee94b41bc, type: 2}
   - {fileID: 11400000, guid: 09337c3bf0abac34099409bea82c06c2, type: 2}

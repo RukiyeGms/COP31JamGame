@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
-  m_Name: TestFishRare
+  m_Name: Giant Manta Ray
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  id: 2
-  fishName: raretestfish
+  id: 5
+  fishName: Giant Manta Ray
   rarity: 1
-  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  info: rare test fish info
+  sprite: {fileID: 5467032498920458844, guid: 9a9b1a63fcf795c48b2d6b034ad0b5a5, type: 3}
+  info: 'A large marine species found in tropical and subtropical oceans, threatened
+    by targeted fishing for Gill Plates and entanglement in nets.
+
+'

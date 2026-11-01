@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
-  m_Name: TestFishLegendary
+  m_Name: European Sturgeon
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  id: 3
-  fishName: LegendarytestFish
-  rarity: 2
-  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  info: legendary test fish
+  id: 7
+  fishName: European Sturgeon
+  rarity: 1
+  sprite: {fileID: -2683008741916087758, guid: b83bb83de49371d43806bd283f99dbd9, type: 3}
+  info: A large ancient fish species native to European coastal waters and rivers,
+    threatened by overfishing for caviar, dam construction, and river pollution.
