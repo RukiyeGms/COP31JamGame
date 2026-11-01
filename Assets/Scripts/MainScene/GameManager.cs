@@ -311,11 +311,6 @@ public class GameManager : MonoBehaviour
         {
             dayEndUI.Show(currentDay, trashPicked, fishRescued);
         }
-        else
-        {
-            Debug.LogWarning("DayEndUI not found!");
-        }
-
         
     }
 
@@ -365,8 +360,6 @@ public class GameManager : MonoBehaviour
         }
 
         isGamePlayed = true;
-
-        Debug.Log("Day " + currentDay + " started!");
     }
 
 
@@ -429,8 +422,6 @@ public class GameManager : MonoBehaviour
         {
             IntroUI.Instance.StartIntro();
         }
-
-        Debug.Log("New Game Started!");
     }
 
 
@@ -449,7 +440,6 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Scene loaded: " + scene.name);
 
         if (!hasStarted)
             return;
@@ -465,7 +455,6 @@ public class GameManager : MonoBehaviour
         {
             if (playerObject == null)
             {
-                Debug.LogError("Player not found!");
                 return;
             }
 
@@ -572,9 +561,6 @@ public class GameManager : MonoBehaviour
         }
 
         PlayerPrefs.Save();
-
-
-        Debug.Log("Saved Day: " + PlayerPrefs.GetInt("Save_LastDay", -1));
     }
 
     private void LoadCheckpoint(bool showResultPanel = true)
@@ -641,8 +627,6 @@ public class GameManager : MonoBehaviour
                 panel.Show(currentDay, trashPicked, fishRescued);
             }
         }
-
-        Debug.Log("Checkpoint loaded: Day " + currentDay);
     }
 
     private void OnDestroy()

@@ -26,11 +26,6 @@ public class TimerScript : MonoBehaviour
 
         if (dayText == null)
         {
-            Debug.LogError(
-                "DayText is missing on: " + gameObject.name +
-                " | Scene: " + gameObject.scene.name,
-                this
-            );
             return;
         }
 

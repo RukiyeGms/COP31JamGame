@@ -47,6 +47,7 @@ public class Trash : MonoBehaviour
             return;
 
         isBeingPicked = true;
+        SoundEffectManager.Play("Wave");
         StartCoroutine(PickupRoutine(player));
     }
 
@@ -59,6 +60,8 @@ public class Trash : MonoBehaviour
         {
             FeedbackUI.Instance.ShowTrash();
         }
+
+        SoundEffectManager.Play("PointTrash");
 
         Destroy(gameObject);
     }

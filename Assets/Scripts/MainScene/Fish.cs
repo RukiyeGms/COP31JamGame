@@ -125,12 +125,16 @@ public class Fish : MonoBehaviour
             FeedbackUI.Instance.ShowFish(fishData.sprite);
         }
 
+        SoundEffectManager.Play("PointFish");
+
         Destroy(gameObject);
     }
 
     private IEnumerator PlaySpawnSplash()
     {
         isSpawning = true;
+
+        SoundEffectManager.Play("Bloop");
 
         splashEffect.SetActive(true);
 

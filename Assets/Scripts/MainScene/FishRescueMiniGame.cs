@@ -49,6 +49,8 @@ public class FishRescueMinigame : MonoBehaviour
         if (player == null || !player.StartSearch())
             return;
 
+        SoundEffectManager.Play("Wave");
+
         currentPlayer = player;
         currentFish = fish;
 
@@ -125,10 +127,6 @@ public class FishRescueMinigame : MonoBehaviour
         if (success && fish != null)
         {
             fish.Rescue();
-        }
-        else
-        {
-            Debug.Log("Rescue failed!");
         }
     }
 

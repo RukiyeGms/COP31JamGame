@@ -7,7 +7,7 @@ public class SoundEffectManager : MonoBehaviour
     AudioSource audioSource;
     static SoundEffectLibrary soundEffectLibrary;
     Slider SFXSlider;
-    float sValue = 0.8f;
+    float sValue = 0.4f;
 
 
     void Awake()
