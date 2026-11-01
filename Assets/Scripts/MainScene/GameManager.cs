@@ -54,14 +54,29 @@ public class GameManager : MonoBehaviour
     int currentDay = 1;
     float remainingTime;
 
+    int lastCompletedDay = 0;
+
+    int savedDayTrash;
+    int savedDayFish;
+
+    int savedTotalTrash;
+    int savedTotalFish;
+
+    HashSet<string> savedFishIds = new HashSet<string>();
+
     public int CurrentDay => currentDay;
     public float RemainingTime => remainingTime;
 
-    public static bool IsGamePlaying => instance != null && instance.isGamePlayed;
+    public static bool IsGamePlaying => instance != null && instance.isGamePlayed && !instance.isPaused;
+
+    bool isPaused;
+    public static bool IsPaused => instance != null && instance.isPaused;
 
     //
 
     GameObject menuPanel;
+
+
 
     private void Awake()
     {
@@ -73,6 +88,8 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         trashPicked = 0;
         fishRescued = 0;
@@ -92,12 +109,14 @@ public class GameManager : MonoBehaviour
         remainingTime = dayDuration;
 
         hasStarted = true;
+
+        LoadCheckpoint();
     }
 
 
     private void Update()
     {
-        if (!isGamePlayed)
+        if (!isGamePlayed || isPaused)
             return;
 
         remainingTime -= Time.deltaTime;
@@ -126,21 +145,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    void GameStart()
-    {
-        isGamePlayed=true;
-    }
-
-    void GameStop()
-    {
-        isGamePlayed=false;
-        Time.timeScale = 0;
-    }
-    void GameEnd()
-    {
-        isGamePlayed=false;//an more
-    }
 
     public static void FishRescuedUp()
     {
@@ -290,6 +294,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        SaveCheckpoint();
+
+        if (FeedbackUI.Instance != null)
+        {
+            FeedbackUI.Instance.Hide();
+        }
+
         EndPanel dayEndUI = FindFirstObjectByType<EndPanel>(  FindObjectsInactive.Include );
 
         if (dayEndUI != null)
@@ -300,16 +311,29 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("DayEndUI not found!");
         }
-    }
 
+        
+    }
 
     public void ReturnToMainMenu()
     {
-        isGamePlayed = false;
+        if (FishRescueMinigame.Instance != null)
+        {
+            FishRescueMinigame.Instance.CancelRescue();
+        }
+
+        isPaused = false;
         Time.timeScale = 1f;
+        isGamePlayed = false;
+
+        LoadCheckpoint(false);
+
+        ClearSpawnedObjects();
+        coralSpawn.ClearCorals();
 
         SceneManager.LoadScene("MenuScene");
     }
+
 
 
     public void NextDay()
@@ -347,6 +371,8 @@ public class GameManager : MonoBehaviour
     {
         if (isGamePlayed)
             return;
+        isPaused = false;
+        Time.timeScale = 1f;
 
         if (gameDatabase != null) ///codex reset
         {
@@ -360,6 +386,12 @@ public class GameManager : MonoBehaviour
 
             PlayerPrefs.Save();
         }
+
+        PlayerPrefs.DeleteKey("Save_HasCheckpoint");
+        PlayerPrefs.Save();
+
+        lastCompletedDay = 0;
+        savedFishIds.Clear();
 
         currentDay = 1;
 
@@ -403,8 +435,11 @@ public class GameManager : MonoBehaviour
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Scene loaded: " + scene.name);
+
         if (!hasStarted)
             return;
 
@@ -425,15 +460,186 @@ public class GameManager : MonoBehaviour
 
             player = playerObject.transform;
 
-            if (!isGamePlayed)
-            {
-                EndPanel panel =FindFirstObjectByType<EndPanel>(FindObjectsInactive.Include );
+            isPaused = false;
+            Time.timeScale = 1f;
 
-                if (panel != null)
+            bool hasCheckpoint =
+                PlayerPrefs.GetInt("Save_HasCheckpoint", 0) == 1;
+
+            LoadCheckpoint();
+
+            if (!hasCheckpoint)
+            {
+                currentDay = 1;
+
+                trashPicked = 0;
+                fishRescued = 0;
+                totaltrashPicked = 0;
+                totalfishRescued = 0;
+
+                remainingTime = dayDuration;
+
+                nextTrashSpawnTime =
+                    Time.time + trashSpawnInterval;
+
+                nextFishSpawnTime =
+                    Time.time + fishonSpawnTime;
+
+                coralSpawn.RefreshCorals();
+
+                isGamePlayed = true;
+            }
+        }
+    }
+
+
+    public void PauseGame()
+    {
+        if (!isGamePlayed || isPaused)
+            return;
+
+        isPaused = true;
+        Time.timeScale = 0f;
+    }
+
+    public void ResumeGame()
+    {
+        if (!isPaused)
+            return;
+
+        isPaused = false;
+        Time.timeScale = 1f;
+    }
+
+    private void SaveCheckpoint()
+    {
+        lastCompletedDay = currentDay;
+
+        savedDayTrash = trashPicked;
+        savedDayFish = fishRescued;
+
+        savedTotalTrash = totaltrashPicked;
+        savedTotalFish = totalfishRescued;
+
+        savedFishIds.Clear();
+
+        if (gameDatabase != null)
+        {
+            foreach (FishData fish in gameDatabase.fishes)
+            {
+                if (fish != null &&
+                    PlayerPrefs.GetInt(fish.id, 0) == 1)
                 {
-                    panel.Show(currentDay, trashPicked, fishRescued);
+                    savedFishIds.Add(fish.id);
                 }
             }
+        }
+
+
+        PlayerPrefs.SetInt("Save_HasCheckpoint", 1);
+
+        PlayerPrefs.SetInt("Save_LastDay", lastCompletedDay);
+
+        PlayerPrefs.SetInt("Save_DayTrash", savedDayTrash);
+        PlayerPrefs.SetInt("Save_DayFish", savedDayFish);
+
+        PlayerPrefs.SetInt("Save_TotalTrash", savedTotalTrash);
+        PlayerPrefs.SetInt("Save_TotalFish", savedTotalFish);
+
+        if (gameDatabase != null)
+        {
+            foreach (FishData fish in gameDatabase.fishes)
+            {
+                if (fish == null)
+                    continue;
+
+                PlayerPrefs.SetInt(
+                    "Save_Fish_" + fish.id,
+                    savedFishIds.Contains(fish.id) ? 1 : 0
+                );
+            }
+        }
+
+        PlayerPrefs.Save();
+
+
+        Debug.Log("Saved Day: " + PlayerPrefs.GetInt("Save_LastDay", -1));
+    }
+
+    private void LoadCheckpoint(bool showResultPanel = true)
+    {
+        bool hasCheckpoint =
+            PlayerPrefs.GetInt("Save_HasCheckpoint", 0) == 1;
+
+        if (gameDatabase != null)
+        {
+            savedFishIds.Clear();
+
+            foreach (FishData fish in gameDatabase.fishes)
+            {
+                if (fish == null)
+                    continue;
+
+                bool discovered = hasCheckpoint &&
+                    PlayerPrefs.GetInt("Save_Fish_" + fish.id, 0) == 1;
+
+                if (discovered)
+                {
+                    savedFishIds.Add(fish.id);
+                    PlayerPrefs.SetInt(fish.id, 1);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(fish.id);
+                }
+            }
+
+            PlayerPrefs.Save();
+        }
+
+        if (!hasCheckpoint)
+            return;
+
+        lastCompletedDay = PlayerPrefs.GetInt("Save_LastDay", 0);
+
+        savedDayTrash = PlayerPrefs.GetInt("Save_DayTrash", 0);
+        savedDayFish = PlayerPrefs.GetInt("Save_DayFish", 0);
+
+        savedTotalTrash = PlayerPrefs.GetInt("Save_TotalTrash", 0);
+        savedTotalFish = PlayerPrefs.GetInt("Save_TotalFish", 0);
+
+        currentDay = lastCompletedDay;
+
+        trashPicked = savedDayTrash;
+        fishRescued = savedDayFish;
+
+        totaltrashPicked = savedTotalTrash;
+        totalfishRescued = savedTotalFish;
+
+        remainingTime = 0;
+        isGamePlayed = false;
+
+        if (showResultPanel)
+        {
+            EndPanel panel = FindFirstObjectByType<EndPanel>(
+                FindObjectsInactive.Include
+            );
+
+            if (panel != null)
+            {
+                panel.Show(currentDay, trashPicked, fishRescued);
+            }
+        }
+
+        Debug.Log("Checkpoint loaded: Day " + currentDay);
+    }
+
+    private void OnDestroy()
+    {
+        if (instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            instance = null;
         }
     }
 

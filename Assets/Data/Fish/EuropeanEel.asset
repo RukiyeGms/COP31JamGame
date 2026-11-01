@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: euro_eel
   fishName: European eel
-  rarity: 0
+  rarity: 1
   sprite: {fileID: 3783237548026130237, guid: 461683b6e489dc542af17e63ea1b18db, type: 3}
   info: A migratory fish species from European waters, threatened by overfishing,
     dams blocking migration, and habitat loss.

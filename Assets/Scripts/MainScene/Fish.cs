@@ -107,6 +107,11 @@ public class Fish : MonoBehaviour
 
         GameManager.FishRescuedUp();
 
+        if (FeedbackUI.Instance != null)
+        {
+            FeedbackUI.Instance.ShowFish(fishData.sprite);
+        }
+
         Destroy(gameObject);
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: angel_shark
   fishName: Angel shark
-  rarity: 0
+  rarity: 2
   sprite: {fileID: -6668022102648153313, guid: b06c541716511b64b94aa95f8a7cb114, type: 3}
   info: A flat-bodied shark species from the Northeast Atlantic and Mediterranean,
     threatened by bottom trawling and accidental catch.

@@ -54,6 +54,12 @@ public class Trash : MonoBehaviour
     private void Pickup()
     {
         GameManager.TrashPicked();
+
+        if (FeedbackUI.Instance != null)
+        {
+            FeedbackUI.Instance.ShowTrash();
+        }
+
         Destroy(gameObject);
     }
 

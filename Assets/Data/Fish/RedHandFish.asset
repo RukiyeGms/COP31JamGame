@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: red_hand
   fishName: Red handfish
-  rarity: 0
+  rarity: 2
   sprite: {fileID: -2137735443573929692, guid: 77c22bdc7d65a0e4483f7a88939d32cb, type: 3}
   info: A rare bottom-dwelling fish from Tasmania (Australia), threatened by severe
     habitat degradation, warming oceans, and low reproductive rates.

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: scalloped_hammer
   fishName: Scalloped hammerhead
-  rarity: 0
+  rarity: 1
   sprite: {fileID: -3413262532803098555, guid: a6eaad992012c9346990f4df07b8778c, type: 3}
   info: A coastal shark species found in warm temperate and tropical waters globally,
     threatened by overfishing and shark fin trade.

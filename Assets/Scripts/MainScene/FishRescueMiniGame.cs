@@ -67,7 +67,7 @@ public class FishRescueMinigame : MonoBehaviour
 
     private void Update()
     {
-        if (!IsActive)
+        if (!IsActive || GameManager.IsPaused)
             return;
 
         remainingTime -= Time.deltaTime;
