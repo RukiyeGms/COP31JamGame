@@ -51,6 +51,14 @@ Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Font: https://kmlgames.itch.io/friendly-scribbles
 
+## Music & SFX
+
+All music and sound effects used in this game are licensed under CC0 1.0 Universal (Public Domain Dedication).
+
+https://creativecommons.org/publicdomain/zero/1.0/
+
+
+
 ---
 
 Made for **GameUp Türkiye Oyun Hackatonu**.
