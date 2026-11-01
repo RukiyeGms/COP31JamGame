@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,15 +16,27 @@ public class Fish : MonoBehaviour
 
     [SerializeField] float rescueDistance = 2f;
 
+    [SerializeField] GameObject splashEffect;
+
+    bool isSpawning;
+
     private void Awake()
     {
         fishData = GetRandomFish();
         spriteRendererFish.sprite =  DAFISH;
     }
 
+    private void Start()
+    {
+        StartCoroutine(PlaySpawnSplash());
+    }
+
     private void OnMouseDown()
     {
         if (!GameManager.IsGamePlaying)
+            return;
+
+        if (isSpawning)
             return;
 
         if (FishRescueMinigame.Instance == null || FishRescueMinigame.Instance.IsActive)
@@ -113,5 +126,18 @@ public class Fish : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private IEnumerator PlaySpawnSplash()
+    {
+        isSpawning = true;
+
+        splashEffect.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        splashEffect.SetActive(false);
+
+        isSpawning = false;
     }
 }

@@ -14,6 +14,7 @@ public class FeedbackUI : MonoBehaviour
 
     [SerializeField] Vector3 playerOffset = new Vector3(0, 1.5f, 0);
     [SerializeField] float duration = 1.2f;
+    [SerializeField] float fullOpacityDuration = 0.5f;
     [SerializeField] float riseDistance = 50f;
 
     float remainingTime;
@@ -40,13 +41,17 @@ public class FeedbackUI : MonoBehaviour
 
         remainingTime -= Time.deltaTime;
 
-        float progress = 1f -
-            Mathf.Clamp01(remainingTime / duration);
+        float progress = 1f - Mathf.Clamp01(remainingTime / duration);
 
-        feedback.anchoredPosition =
-            startingPosition + Vector2.up * riseDistance * progress;
+        feedback.anchoredPosition = startingPosition + Vector2.up * riseDistance * progress;
 
-        canvasGroup.alpha = 1f - progress;
+        float elapsedTime = duration - remainingTime;
+
+        float fadeDuration = Mathf.Max(0.01f, duration - fullOpacityDuration);
+
+        float fadeProgress = Mathf.Clamp01((elapsedTime - fullOpacityDuration) / fadeDuration);
+
+        canvasGroup.alpha = 1f - fadeProgress;
 
         if (remainingTime <= 0)
         {

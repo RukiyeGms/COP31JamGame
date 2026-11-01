@@ -12,6 +12,9 @@ public class PauseUI : MonoBehaviour
 
     private void Update()
     {
+        if (IntroUI.Instance != null && IntroUI.Instance.IsShowing)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();

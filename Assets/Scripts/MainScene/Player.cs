@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.IsPaused)
+        if (GameManager.IsPaused || GameManager.IsIntroActive)
             return;
 
         if (isBusy || (FishRescueMinigame.Instance != null && FishRescueMinigame.Instance.IsActive))

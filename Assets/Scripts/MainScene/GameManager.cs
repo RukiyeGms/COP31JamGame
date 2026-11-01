@@ -6,6 +6,10 @@ public class GameManager : MonoBehaviour
 {
     CoralSpawn coralSpawn;
 
+    bool isIntroActive;
+
+    public static bool IsIntroActive => instance != null && instance.isIntroActive;
+
     [SerializeField] GameDatabase gameDatabase;
 
     List<GameObject> spawnedTrashes = new List<GameObject>();
@@ -116,7 +120,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isGamePlayed || isPaused)
+        if (!isGamePlayed || isPaused || isIntroActive)
             return;
 
         remainingTime -= Time.deltaTime;
@@ -417,7 +421,14 @@ public class GameManager : MonoBehaviour
             dayEndUI.gameObject.SetActive(false);
         }
 
+        PlayerPrefs.DeleteKey("Save_IntroSeen");
+
         isGamePlayed = true;
+
+        if (IntroUI.Instance != null)
+        {
+            IntroUI.Instance.StartIntro();
+        }
 
         Debug.Log("New Game Started!");
     }
@@ -642,7 +653,9 @@ public class GameManager : MonoBehaviour
             instance = null;
         }
     }
-
-
+    public void SetIntroActive(bool value)
+    {
+        isIntroActive = value;
+    }
 
 }
