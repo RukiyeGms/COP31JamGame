@@ -22,23 +22,36 @@ public class FishListManager : MonoBehaviour
 
     void Start()
     {
+        
+
         // Başlangıçta detay panelini gizle
         if (detailPanel != null)
             detailPanel.SetActive(false);
 
         // Kapat butonuna tıklama dinleyicisi ekle
         if (closeDetailButton != null)
+        {
+            closeDetailButton.onClick.RemoveAllListeners();
             closeDetailButton.onClick.AddListener(CloseDetailPanel);
+        }
 
         GenerateFishList();
     }
 
     void GenerateFishList()
     {
-        if (gameDatabase == null) return;
+        if (gameDatabase == null || gameDatabase.fishes == null) return;
+
+        // Önceki kartları temizle
+        foreach (Transform child in fishListContainer)
+        {
+            Destroy(child.gameObject);
+        }
 
         foreach (var fish in gameDatabase.fishes)
         {
+            if (fish == null) continue;
+
             GameObject newCard = Instantiate(fishCardPrefab, fishListContainer);
 
             Image fishImage = newCard.transform.Find("FishImage").GetComponent<Image>();
@@ -55,12 +68,15 @@ public class FishListManager : MonoBehaviour
                 // Keşfedilmiş Balık
                 fishImage.color = Color.white;
                 fishNameText.text = fish.fishName;
-                fishInfoText.text = "Keşfedildi!";
+
+                // 1. DÜZELTME: "Keşfedildi!" yerine balığın Nadirlik (Rarity) bilgisi yazıyor
+                fishInfoText.text = fish.rarity.ToString();
 
                 // Karta tıklama özelliği ekle
                 if (cardButton != null)
                 {
                     cardButton.interactable = true;
+                    cardButton.onClick.RemoveAllListeners();
                     // Tıklanınca ilgili balık verisiyle detay panelini aç
                     cardButton.onClick.AddListener(() => OpenDetailPanel(fish));
                 }
@@ -83,15 +99,18 @@ public class FishListManager : MonoBehaviour
     // Detay panelini açan fonksiyon
     public void OpenDetailPanel(FishData fish)
     {
-        if (detailPanel == null) return;
+        if (detailPanel == null || fish == null) return;
 
         detailFishImage.sprite = fish.sprite;
         detailFishNameText.text = fish.fishName;
 
-        // Eğer FishData içinde detay metni değişkeni (ör. details/description) varsa onu bağla:
-        detailFishInfoText.text = "Bu balık hakkında detaylı bilgi ve hikaye buraya gelecek.";
+        // 3. DÜZELTME: Sabit metin yerine FishData içindeki 'info' metni aktarılıyor
+        detailFishInfoText.text = fish.info;
 
         detailPanel.SetActive(true);
+
+        // 2. DÜZELTME: Pop-up'ın kartların ve Scroll View'ın arkasında kalmasını önler, EN ÖNE taşır
+        detailPanel.transform.SetAsLastSibling();
     }
 
     // Detay panelini kapatan fonksiyon

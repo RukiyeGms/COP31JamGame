@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: 9
   fishName: Blue Whale
-  rarity: 1
+  rarity: 0
   sprite: {fileID: -8466760478222612337, guid: 431402f17ca66054dbffc0b31d740fad, type: 3}
   info: The largest animal on Earth found in oceans worldwide, threatened by ship
     strikes, entanglement in fishing gear, and climate change.

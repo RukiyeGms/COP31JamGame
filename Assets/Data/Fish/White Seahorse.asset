@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: 8
   fishName: White Seahorse
-  rarity: 1
+  rarity: 2
   sprite: {fileID: -546942333600129092, guid: a37a6c859bdf751458f79b0f524e1e98, type: 3}
   info: A small seahorse species endemic to the east coast of Australia, threatened
     by habitat loss due to coastal development and storm damage.

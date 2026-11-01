@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   id: 5
   fishName: Giant Manta Ray
-  rarity: 1
+  rarity: 0
   sprite: {fileID: 5467032498920458844, guid: 9a9b1a63fcf795c48b2d6b034ad0b5a5, type: 3}
   info: 'A large marine species found in tropical and subtropical oceans, threatened
     by targeted fishing for Gill Plates and entanglement in nets.
