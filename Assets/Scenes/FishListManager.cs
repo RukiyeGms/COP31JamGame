@@ -1,16 +1,17 @@
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; 
 
 public class FishListManager : MonoBehaviour
 {
-    [Header("UI Elemanları")]
-    public Transform commonListContent;   
-    public Transform rareListContent;     
-    public Transform legendaryListContent; 
+    [Header("UI Bağlantıları")]
+    public Transform fishListContainer;
+    public GameObject fishCardPrefab;
 
-    public GameObject fishCardPrefab;     
+    [Header("Veritabanı")]
+    public GameDatabase gameDatabase; // Veritabanı referansı eklendi
 
     void Start()
     {
@@ -19,37 +20,27 @@ public class FishListManager : MonoBehaviour
 
     void GenerateFishList()
     {
-        foreach (var fish in GameDatabase.fishes)
+        if (gameDatabase == null) return;
+
+        // gameDatabase içindeki fishes listesini kullanıyoruz
+        foreach (var fish in gameDatabase.fishes)
         {
-            Transform targetContent = null;
-
-            if (fish.rarity == Rarity.Common)
-                targetContent = commonListContent;
-            else if (fish.rarity == Rarity.Rare)
-                targetContent = rareListContent;
-            else if (fish.rarity == Rarity.Legendary)
-                targetContent = legendaryListContent;
-
-            if (targetContent == null) continue;
-
-            GameObject newCard = Instantiate(fishCardPrefab, targetContent);
+            GameObject newCard = Instantiate(fishCardPrefab, fishListContainer);
 
             Image fishImage = newCard.transform.Find("FishImage").GetComponent<Image>();
             TMP_Text fishNameText = newCard.transform.Find("FishNameText").GetComponent<TMP_Text>();
             TMP_Text fishInfoText = newCard.transform.Find("FishInfoText").GetComponent<TMP_Text>();
 
-            fishImage.sprite = fish.icon;
+            fishImage.sprite = fish.sprite;
 
             if (PlayerPrefs.GetInt(fish.id.ToString(), 0) == 1)
             {
-    
-                fishImage.color = Color.white; 
+                fishImage.color = Color.white;
                 fishNameText.text = fish.fishName;
-                fishInfoText.text = fish.description;
+                fishInfoText.text = "Kurtarıldı!";
             }
             else
             {
-
                 fishImage.color = Color.black;
                 fishNameText.text = "???";
                 fishInfoText.text = "???";
