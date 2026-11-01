@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CoralSpawn : MonoBehaviour
 {
+    List<GameObject> spawnedCorals = new List<GameObject>();
     [SerializeField] List<string> CoralAnimationNames;
 
     [SerializeField] float maxSpawnY = 5;
@@ -27,14 +28,14 @@ public class CoralSpawn : MonoBehaviour
                 Vector2 spawnPosition = GetRandomSpawnPos();
 
                 
-                if (Physics2D.OverlapCircle(
-                    spawnPosition, checkRadius, spawnObstacleMask))
+                if (Physics2D.OverlapCircle( spawnPosition, checkRadius, spawnObstacleMask))
                 {
                     continue;
                 }
 
-                GameObject coral = Instantiate(
-                    coralPrefab, spawnPosition, Quaternion.identity);
+                GameObject coral = Instantiate(coralPrefab, spawnPosition, Quaternion.identity);
+
+                spawnedCorals.Add(coral);
 
                 Animator animator = coral.GetComponent<Animator>();
                 GetRandomCoralAnimation(animator);
@@ -61,5 +62,25 @@ public class CoralSpawn : MonoBehaviour
         float y = Random.Range(minSpawnY, maxSpawnY);
 
         return new Vector2(x, y);
+    }
+
+    public void ClearCorals()
+    {
+        foreach (GameObject coral in spawnedCorals)
+        {
+            if (coral != null)
+            {
+                coral.SetActive(false);
+                Destroy(coral);
+            }
+        }
+
+        spawnedCorals.Clear();
+    }
+
+    public void RefreshCorals()
+    {
+        ClearCorals();
+        SpawnCorals();
     }
 }

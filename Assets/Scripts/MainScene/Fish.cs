@@ -4,8 +4,8 @@ using UnityEngine;
 public class Fish : MonoBehaviour
 {
     FishData fishData;
-    TrashData trashData;
     [SerializeField] SpriteRenderer spriteRendererFish;
+    [SerializeField] Sprite DAFISH;
     //text
 
     [SerializeField] GameDatabase gameDatabase;
@@ -18,23 +18,21 @@ public class Fish : MonoBehaviour
     private void Awake()
     {
         fishData = GetRandomFish();
-        trashData = GetRandomTrash();
-        spriteRendererFish.sprite =  fishData.sprite;
+        spriteRendererFish.sprite =  DAFISH;
     }
 
     private void OnMouseDown()
     {
-        if (FishRescueMinigame.Instance == null ||
-            FishRescueMinigame.Instance.IsActive)
+        if (!GameManager.IsGamePlaying)
+            return;
+
+        if (FishRescueMinigame.Instance == null || FishRescueMinigame.Instance.IsActive)
             return;
 
         if (GameManager.playerObject == null)
             return;
 
-        float distance = Vector2.Distance(
-            transform.position,
-            GameManager.playerObject.transform.position
-        );
+        float distance = Vector2.Distance(transform.position, GameManager.playerObject.transform.position);
 
         if (distance > rescueDistance)
             return;
@@ -98,17 +96,6 @@ public class Fish : MonoBehaviour
         else
         {
             return Rarity.Legendary;
-        }
-    }
-
-    private TrashData GetRandomTrash()
-    {
-        if (gameDatabase.trashes.Count == 0) { return null; }
-        else
-        {
-            int randomindex = Random.Range(0, gameDatabase.trashes.Count);
-
-            return gameDatabase.trashes[randomindex];
         }
     }
 

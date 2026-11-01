@@ -17,6 +17,7 @@ public class FishRescueMinigame : MonoBehaviour
     [SerializeField] float rescueDuration = 6f;
 
     Fish currentFish;
+    Player currentPlayer;
 
     float progress;
     float remainingTime;
@@ -35,11 +36,20 @@ public class FishRescueMinigame : MonoBehaviour
         rescueBarObject.SetActive(false);
     }
 
+
     public void StartRescue(Fish fish)
     {
-        if (IsActive || fish == null)
+        if (IsActive || fish == null ||
+            GameManager.playerObject == null)
             return;
 
+        Player player =
+            GameManager.playerObject.GetComponent<Player>();
+
+        if (player == null || !player.StartSearch())
+            return;
+
+        currentPlayer = player;
         currentFish = fish;
 
         progress = 0;
@@ -53,6 +63,7 @@ public class FishRescueMinigame : MonoBehaviour
 
         IsActive = true;
     }
+
 
     private void Update()
     {
@@ -87,6 +98,8 @@ public class FishRescueMinigame : MonoBehaviour
         }
     }
 
+
+
     private void EndRescue(bool success)
     {
         Fish fish = currentFish;
@@ -94,6 +107,20 @@ public class FishRescueMinigame : MonoBehaviour
         IsActive = false;
         currentFish = null;
         rescueBarObject.SetActive(false);
+
+        if (currentPlayer != null)
+        {
+            if (success)
+            {
+                currentPlayer.EndSearch();
+            }
+            else
+            {
+                currentPlayer.CancelSearch();
+            }
+        }
+
+        currentPlayer = null;
 
         if (success && fish != null)
         {
@@ -104,6 +131,8 @@ public class FishRescueMinigame : MonoBehaviour
             Debug.Log("Rescue failed!");
         }
     }
+
+
 
     private void LateUpdate()
     {
@@ -121,4 +150,13 @@ public class FishRescueMinigame : MonoBehaviour
         rescueCanvas.position =
             GameManager.playerObject.transform.position + barOffset;
     }
+
+    public void CancelRescue()
+    {
+        if (IsActive)
+        {
+            EndRescue(false);
+        }
+    }
+
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Trash : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Trash : MonoBehaviour
     Animator animator;
     [SerializeField] float pickupDistance = 2f;
 
+    [SerializeField] float searchDuration = 1f;
+    bool isBeingPicked;
 
     private void Awake()
     {
@@ -16,7 +19,12 @@ public class Trash : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        Debug.Log("Trash OnMouseDown called!");
+
+        if (!GameManager.IsGamePlaying)
+        { return; }
+
+        if (isBeingPicked)
+            return;
 
         if (FishRescueMinigame.Instance != null &&
             FishRescueMinigame.Instance.IsActive)
@@ -30,13 +38,16 @@ public class Trash : MonoBehaviour
             GameManager.playerObject.transform.position
         );
 
-        Debug.Log("Distance to player: " + distance);
-
         if (distance > pickupDistance)
             return;
 
-        Debug.Log("Trash picked successfully!");
-        Pickup();
+        Player player = GameManager.playerObject.GetComponent<Player>();
+
+        if (player == null || !player.StartSearch())
+            return;
+
+        isBeingPicked = true;
+        StartCoroutine(PickupRoutine(player));
     }
 
 
@@ -44,6 +55,14 @@ public class Trash : MonoBehaviour
     {
         GameManager.TrashPicked();
         Destroy(gameObject);
+    }
+
+    private IEnumerator PickupRoutine(Player player)
+    {
+        yield return new WaitForSeconds(searchDuration);
+
+        player.EndSearch();
+        Pickup();
     }
 
     private TrashData GetRandomTrash()
@@ -57,6 +76,23 @@ public class Trash : MonoBehaviour
         }
     }
 
+    public void CancelPickup()
+    {
+        if (!isBeingPicked)
+            return;
+
+        StopAllCoroutines();
+        isBeingPicked = false;
+
+        if (GameManager.playerObject != null)
+        {
+            Player player =
+                GameManager.playerObject.GetComponent<Player>();
+
+            if (player != null)
+                player.CancelSearch();
+        }
+    }
 
 
 

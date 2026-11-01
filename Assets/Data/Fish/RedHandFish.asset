@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
-  m_Name: TestFishCommon
+  m_Name: RedHandFish
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  id: 1
-  fishName: TestFish
+  id: red_hand
+  fishName: Red handfish
   rarity: 0
-  sprite: {fileID: 21300000, guid: bd1895ba3d338aa458a7c356feadd8d5, type: 3}
-  info: test fish info
+  sprite: {fileID: -2137735443573929692, guid: 77c22bdc7d65a0e4483f7a88939d32cb, type: 3}
+  info: A rare bottom-dwelling fish from Tasmania (Australia), threatened by severe
+    habitat degradation, warming oceans, and low reproductive rates.

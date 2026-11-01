@@ -3,6 +3,7 @@ using TMPro;
 public class TimerScript : MonoBehaviour
 {
     TMP_Text timerText;
+    [SerializeField] TMP_Text dayText;
 
     private void Awake()
     {
@@ -22,5 +23,17 @@ public class TimerScript : MonoBehaviour
         int seconds = remainingSeconds % 60;
 
         timerText.text = $"{minutes:00}:{seconds:00}";
+
+        if (dayText == null)
+        {
+            Debug.LogError(
+                "DayText is missing on: " + gameObject.name +
+                " | Scene: " + gameObject.scene.name,
+                this
+            );
+            return;
+        }
+
+        dayText.text = "Day " + GameManager.instance.CurrentDay;
     }
 }

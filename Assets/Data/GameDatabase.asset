@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: GameDatabase
   m_EditorClassIdentifier: Assembly-CSharp::GameDatabase
   fishes:
-  - {fileID: 11400000, guid: 8e0ee2fda7041964cb670068da0ccfc4, type: 2}
-  - {fileID: 11400000, guid: 402001c3b2ae86f4a964fd1c73ee95d3, type: 2}
-  - {fileID: 11400000, guid: 3a5c48e583976304ab9d45c9961ab377, type: 2}
+  - {fileID: 11400000, guid: 68bab77c9818efa4689a73d80f68fd2f, type: 2}
+  - {fileID: 11400000, guid: fed649138b71a204b901d88a2379a87d, type: 2}
+  - {fileID: 11400000, guid: f5a310e69c6307949b1aafaf1a763398, type: 2}
+  - {fileID: 11400000, guid: cf3128286b2af834d95cc7caf5db8c46, type: 2}
+  - {fileID: 11400000, guid: f0831570359e6814f85633202c17de23, type: 2}
+  - {fileID: 11400000, guid: 6708d433c99e64542a4ec5e21b414412, type: 2}
+  - {fileID: 11400000, guid: 426516b2c360b5649ae7a91d8d15cc80, type: 2}
+  - {fileID: 11400000, guid: 527c2aa47bf73094eb35a58fddec72d2, type: 2}
+  - {fileID: 11400000, guid: ceb0da421ea45d04c8ea5ec474240ad1, type: 2}
   trashes:
   - {fileID: 11400000, guid: f869c9beb4614aa4fa01c40ee94b41bc, type: 2}
   - {fileID: 11400000, guid: 09337c3bf0abac34099409bea82c06c2, type: 2}

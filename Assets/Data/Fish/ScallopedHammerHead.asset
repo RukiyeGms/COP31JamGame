@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
-  m_Name: TestFishLegendary
+  m_Name: ScallopedHammerHead
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  id: 3
-  fishName: LegendarytestFish
-  rarity: 2
-  sprite: {fileID: 21300000, guid: 6958cd8ec74bbe747adeee048506d47d, type: 3}
-  info: legendary test fish
+  id: scalloped_hammer
+  fishName: Scalloped hammerhead
+  rarity: 0
+  sprite: {fileID: -3413262532803098555, guid: a6eaad992012c9346990f4df07b8778c, type: 3}
+  info: A coastal shark species found in warm temperate and tropical waters globally,
+    threatened by overfishing and shark fin trade.

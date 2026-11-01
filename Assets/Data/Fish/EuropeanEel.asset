@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
-  m_Name: TestFishRare
+  m_Name: EuropeanEel
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  id: 2
-  fishName: raretestfish
-  rarity: 1
-  sprite: {fileID: 21300000, guid: 33a105b2fc84159458014b33d3057cf2, type: 3}
-  info: rare test fish info
+  id: euro_eel
+  fishName: European eel
+  rarity: 0
+  sprite: {fileID: 3783237548026130237, guid: 461683b6e489dc542af17e63ea1b18db, type: 3}
+  info: A migratory fish species from European waters, threatened by overfishing,
+    dams blocking migration, and habitat loss.

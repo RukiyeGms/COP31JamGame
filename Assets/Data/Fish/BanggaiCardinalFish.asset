@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ddb20e58a6b41b489325123a8a1ebf7, type: 3}
+  m_Name: BanggaiCardinalFish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  id: banggai_cardinal
+  fishName: Banggai cardinalfish
+  rarity: 0
+  sprite: {fileID: 8108336538417868044, guid: 7e602fe0f32d1fb469b0582084ee037e, type: 3}
+  info: A small striped fish from Indonesia, threatened by collection for the aquarium
+    trade and habitat degradation.

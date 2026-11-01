@@ -1,8 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     CoralSpawn coralSpawn;
+
+    [SerializeField] GameDatabase gameDatabase;
+
+    List<GameObject> spawnedTrashes = new List<GameObject>();
+    List<GameObject> spawnedFishes = new List<GameObject>();
+
+    bool hasStarted;
 
     bool isGamePlayed;
     public static GameManager instance;
@@ -48,23 +57,28 @@ public class GameManager : MonoBehaviour
     public int CurrentDay => currentDay;
     public float RemainingTime => remainingTime;
 
+    public static bool IsGamePlaying => instance != null && instance.isGamePlayed;
+
     //
 
     GameObject menuPanel;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(instance);
+            Destroy(gameObject);
+            return;
         }
-        else { Destroy(gameObject); }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
         trashPicked = 0;
         fishRescued = 0;
-        isGamePlayed = true; //false later
+        isGamePlayed = true;
         trashonscreen = 0;
+
         coralSpawn = GetComponent<CoralSpawn>();
     }
 
@@ -76,6 +90,8 @@ public class GameManager : MonoBehaviour
         nextFishSpawnTime = Time.time + fishonSpawnTime;
 
         remainingTime = dayDuration;
+
+        hasStarted = true;
     }
 
 
@@ -175,9 +191,10 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            Instantiate(fishPrefab, spawnPos, Quaternion.identity);
-
+            GameObject fish = Instantiate(fishPrefab, spawnPos, Quaternion.identity);
+            spawnedFishes.Add(fish);
             fishonScreen++;
+
             return;
         }
     }
@@ -205,8 +222,9 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            
-            Instantiate(trashPrefab, spawnPos, Quaternion.identity);
+
+            GameObject trash = Instantiate(trashPrefab, spawnPos, Quaternion.identity);
+            spawnedTrashes.Add(trash);
             trashonscreen++;
 
             return;
@@ -224,17 +242,201 @@ public class GameManager : MonoBehaviour
         return new Vector2(spawnx, spawny);
     }
 
+    private void ClearSpawnedObjects()
+    {
+        foreach (GameObject trash in spawnedTrashes)
+        {
+            if (trash != null)
+            {
+                trash.SetActive(false);
+                Destroy(trash);
+            }
+        }
+
+        foreach (GameObject fish in spawnedFishes)
+        {
+            if (fish != null)
+            {
+                fish.SetActive(false);
+                Destroy(fish);
+            }
+        }
+
+        spawnedTrashes.Clear();
+        spawnedFishes.Clear();
+
+        trashonscreen = 0;
+        fishonScreen = 0;
+    }
+
     private void EndDay()
     {
         isGamePlayed = false;
 
-        Debug.Log("Day " + currentDay + " completed!");
-        Debug.Log("Trash collected: " + trashPicked);
-        Debug.Log("Fish rescued: " + fishRescued);
+
+        if (FishRescueMinigame.Instance != null)
+        {
+            FishRescueMinigame.Instance.CancelRescue();
+        }
+
+        foreach (GameObject trash in spawnedTrashes)
+        {
+            if (trash != null)
+            {
+                Trash trashScript = trash.GetComponent<Trash>();
+
+                if (trashScript != null)
+                    trashScript.CancelPickup();
+            }
+        }
+
+        EndPanel dayEndUI = FindFirstObjectByType<EndPanel>(  FindObjectsInactive.Include );
+
+        if (dayEndUI != null)
+        {
+            dayEndUI.Show(currentDay, trashPicked, fishRescued);
+        }
+        else
+        {
+            Debug.LogWarning("DayEndUI not found!");
+        }
+    }
+
+
+    public void ReturnToMainMenu()
+    {
+        isGamePlayed = false;
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene("MenuScene");
+    }
+
+
+    public void NextDay()
+    {
+        if (isGamePlayed)
+            return;
+
+        currentDay++;
+        trashPicked = 0;
+        fishRescued = 0;
+
+        remainingTime = dayDuration;
+
+        ClearSpawnedObjects();
+        coralSpawn.RefreshCorals();
+
+        nextTrashSpawnTime = Time.time + trashSpawnInterval;
+        nextFishSpawnTime = Time.time + fishonSpawnTime;
+
+        EndPanel dayEndUI = FindFirstObjectByType<EndPanel>( FindObjectsInactive.Include );
+
+        if (dayEndUI != null)
+        {
+            dayEndUI.gameObject.SetActive(false);
+        }
+
+        isGamePlayed = true;
+
+        Debug.Log("Day " + currentDay + " started!");
     }
 
 
 
-    /// menu and panel thingy
+    public void NewGame()
+    {
+        if (isGamePlayed)
+            return;
+
+        if (gameDatabase != null) ///codex reset
+        {
+            foreach (FishData fish in gameDatabase.fishes)
+            {
+                if (fish != null)
+                {
+                    PlayerPrefs.DeleteKey(fish.id);
+                }
+            }
+
+            PlayerPrefs.Save();
+        }
+
+        currentDay = 1;
+
+        trashPicked = 0;
+        fishRescued = 0;
+
+        totaltrashPicked = 0;
+        totalfishRescued = 0;
+
+        remainingTime = dayDuration;
+
+        ClearSpawnedObjects();
+        coralSpawn.RefreshCorals();
+
+        nextTrashSpawnTime = Time.time + trashSpawnInterval;
+        nextFishSpawnTime = Time.time + fishonSpawnTime;
+
+
+        EndPanel dayEndUI = FindFirstObjectByType<EndPanel>( FindObjectsInactive.Include);
+
+        if (dayEndUI != null)
+        {
+            dayEndUI.gameObject.SetActive(false);
+        }
+
+        isGamePlayed = true;
+
+        Debug.Log("New Game Started!");
+    }
+
+
+    private void OnEnable()
+    {
+        if (instance == this)
+            SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        if (instance == this)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!hasStarted)
+            return;
+
+        if (scene.name == "MenuScene")
+        {
+            player = null;
+            playerObject = null;
+            return;
+        }
+
+        if (scene.name == "MainScene")
+        {
+            if (playerObject == null)
+            {
+                Debug.LogError("Player not found!");
+                return;
+            }
+
+            player = playerObject.transform;
+
+            if (!isGamePlayed)
+            {
+                EndPanel panel =FindFirstObjectByType<EndPanel>(FindObjectsInactive.Include );
+
+                if (panel != null)
+                {
+                    panel.Show(currentDay, trashPicked, fishRescued);
+                }
+            }
+        }
+    }
+
+
 
 }
